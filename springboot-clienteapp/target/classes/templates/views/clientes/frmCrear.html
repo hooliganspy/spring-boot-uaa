@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="plantilla/template :: head">
+
+</head>
+<body>
+<header th:replace="plantilla/template :: header">
+
+</header>
+
+    <div class="container">
+        <div class="card bg-light">
+            <div class="card-header" th:text="${titulo}"></div>
+                    <div class="card-body">
+                        <div class="container">
+                            <form th:action="@{/views/clientes/save}" th:object="${cliente}" method="post">
+                                <div class="form-group row">
+                                    <label class="col-md-2" for="nombres">Nombres:</label>
+                                    <input type = "text" th:field="*{nombres}" class="form-control form-control-sm col-md-6" id="nombres" placeholder="Nombres del Cliente">
+                                </div>
+
+                                <div class="form-group row">
+                                    <label class="col-md-2" for="apellidos">Apellidos:</label>
+                                    <input type = "text" th:field="*{apellidos}" class="form-control form-control-sm col-md-6" id="apellidos" placeholder="Apellidos del Cliente">
+                                </div>
+
+                                <div class="form-group row">
+                                    <label class="col-md-2" for="telefono">Télefono:</label>
+                                    <input type = "text"th:field="*{telefono}" class="form-control form-control-sm col-md-6" id="telefono" placeholder="Teléfono">
+                                </div>
+
+                                <div class="form-group row">
+                                    <label class="col-md-2" for="email">Email:</label>
+                                    <input type = "text" th:field="*{email}" class="form-control form-control-sm col-md-6" id="email" placeholder="Email">
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-md-2" for="ciudad">Ciudad:</label>
+                                    <select type = "text" th:field="*{ciudad}" class="form-control form-control-sm col-md-6" id="ciudad">
+                                        <option th:each="ciudad:${ciudades}"
+                                                th:value="${ciudad.id}"
+                                                th:text="${ciudad.ciudad}">
+                                        </option>
+                                    </select>
+                                </div>
+                                <br>
+                                <input type="submit" class="btn btn-primary btn-sm" value="Guardar"/>
+
+                            </form>
+                    </div>
+            </div>
+
+
+<footer th:replace="plantilla/template :: footer">
+
+</footer>
+</body>
+</html>
