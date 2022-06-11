@@ -16,7 +16,7 @@ import com.springboot.clienteapp.models.entity.Cliente;
 import com.springboot.clienteapp.models.service.IClienteService;
 
 @Controller
-@RequestMapping("/views/clientes")
+@RequestMapping("/views/clientes/")
 public class ClienteController {
 	
 	@Autowired
