@@ -7,10 +7,9 @@ import com.springboot.clienteapp.models.service.ICiudadService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
 import com.springboot.clienteapp.models.entity.Cliente;
 import com.springboot.clienteapp.models.service.IClienteService;
@@ -32,24 +31,55 @@ public class ClienteController {
 		model.addAttribute("titulo", "Lista de Clientes");
 		model.addAttribute("clientes", listadoClientes);
 		
-		return "/views/clientes/listar";
+		return "views/clientes/listar";
 	}
 	@GetMapping("/create")
 	public String crear(Model model) {
 		Cliente cliente = new Cliente();
 		List<Ciudad> listCiudades = ciudadService.listaCiudades();
 
-		model.addAttribute("titulo", "Formulario:Nuevo Cliente");
+		model.addAttribute("titulo", "Formulario: Nuevo Cliente");
 		model.addAttribute("cliente", cliente);
 		model.addAttribute("ciudades", listCiudades);
 
-		return "/views/clientes/frmCrear";
+		return "views/clientes/frmCrear";
 	}
 
 	@PostMapping("/save")
-	public String guardar(@ModelAttribute Cliente cliente){
+	public String guardar(@Validated @ModelAttribute Cliente cliente, BindingResult result, Model model){
+		List<Ciudad> listCiudades = ciudadService.listaCiudades();
+
+		if (result.hasErrors()){
+			model.addAttribute("titulo", "Formulario:Nuevo Cliente");
+			model.addAttribute("cliente", cliente);
+			model.addAttribute("ciudades", listCiudades);
+			System.out.println("Hay errores en el formulario");
+			return "views/clientes/frmCrear";
+		}
+
 		clienteService.guardar(cliente);
 		System.out.println("Cliente Guardado con exito");
+		return "redirect:/views/clientes/";
+	}
+
+	@GetMapping("/edit/{id}")
+	public String editar(@PathVariable("id") Long idCliente, Model model) {
+		Cliente cliente = clienteService.buscarPorId(idCliente);
+
+		List<Ciudad> listCiudades = ciudadService.listaCiudades();
+
+		model.addAttribute("titulo", "Formulario: Editar Cliente");
+		model.addAttribute("cliente", cliente);
+		model.addAttribute("ciudades", listCiudades);
+
+		return "views/clientes/frmCrear";
+	}
+
+	@GetMapping("/delete/{id}")
+	public String eliminar(@PathVariable("id") Long idCliente) {
+		clienteService.eliminar(idCliente);
+		System.out.println("Registro eliminado con exito!");
+
 		return "redirect:/views/clientes/";
 	}
 	
